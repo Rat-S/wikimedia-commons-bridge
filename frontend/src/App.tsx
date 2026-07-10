@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { api, MediaItem } from "./api/client";
+import { api } from "./api/client";
+import type { MediaItem } from "./api/client";
 import { Layout } from "./components/Layout";
 import { AuthStatus } from "./components/AuthStatus";
 import { PickerLauncher } from "./components/PickerLauncher";
-import { MetadataEditor, CuratedMediaItem } from "./components/MetadataEditor";
+import { MetadataEditor } from "./components/MetadataEditor";
+import type { CuratedMediaItem } from "./components/MetadataEditor";
 import { UploadQueue } from "./components/UploadQueue";
 import { Loader2, ArrowRight, ShieldCheck, AlertCircle } from "lucide-react";
 

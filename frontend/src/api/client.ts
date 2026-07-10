@@ -2,7 +2,7 @@
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
-async def_fetch(endpoint: string, options: RequestInit = {}):
+async function def_fetch(endpoint: string, options: RequestInit = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   
   // Set default credentials include to allow session cookies

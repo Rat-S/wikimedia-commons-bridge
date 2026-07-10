@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MediaItem } from "../api/client";
+import type { MediaItem } from "../api/client";
 import { CategorySearch } from "./CategorySearch";
 import { Check, Edit3, Grid, Layers, Sparkles, Globe, FileText, CheckCircle, Info } from "lucide-react";
 

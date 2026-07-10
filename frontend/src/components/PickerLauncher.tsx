@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { api, MediaItem } from "../api/client";
+import { api } from "../api/client";
+import type { MediaItem } from "../api/client";
 import { FolderHeart, Loader2, Sparkles, AlertCircle } from "lucide-react";
 
 interface PickerLauncherProps {

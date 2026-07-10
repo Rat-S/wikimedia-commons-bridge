@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { api, UploadStatusResponse } from "../api/client";
+import { api } from "../api/client";
+import type { UploadStatusResponse } from "../api/client";
 import confetti from "canvas-confetti";
 import { CheckCircle2, XCircle, Loader2, ExternalLink, RefreshCw, Sparkles } from "lucide-react";
 
