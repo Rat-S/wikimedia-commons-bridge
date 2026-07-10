@@ -1,0 +1,178 @@
+/* Modern Custom Variables for Wikimedia Commons Bridge */
+:root {
+  /* HSL Color System - Default Premium Dark Mode */
+  --bg-primary: hsl(222, 47%, 9%);
+  --bg-secondary: hsl(222, 47%, 14%);
+  --bg-card: hsla(223, 47%, 16%, 0.8);
+  --bg-input: hsl(223, 47%, 20%);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 20%, 75%);
+  --text-muted: hsl(215, 16%, 55%);
+  
+  --accent-wikimedia: hsl(212, 100%, 55%);
+  --accent-wikimedia-hover: hsl(212, 100%, 65%);
+  --accent-google: hsl(152, 60%, 50%);
+  --accent-google-hover: hsl(152, 60%, 60%);
+  
+  --border-color: hsl(223, 30%, 25%);
+  --border-glow: hsla(212, 100%, 55%, 0.15);
+  
+  --success: hsl(142, 70%, 45%);
+  --warning: hsl(38, 92%, 50%);
+  --danger: hsl(346, 84%, 60%);
+  
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  --radius-lg: 12px;
+  --radius-md: 8px;
+}
+
+/* Light Mode Overrides */
+:root[data-theme="light"] {
+  --bg-primary: hsl(210, 40%, 96%);
+  --bg-secondary: hsl(0, 0%, 100%);
+  --bg-card: hsla(210, 40%, 98%, 0.9);
+  --bg-input: hsl(210, 30%, 93%);
+  
+  --text-primary: hsl(222, 47%, 11%);
+  --text-secondary: hsl(222, 20%, 35%);
+  --text-muted: hsl(220, 15%, 55%);
+  
+  --accent-wikimedia: hsl(212, 90%, 48%);
+  --accent-wikimedia-hover: hsl(212, 95%, 40%);
+  --accent-google: hsl(152, 70%, 40%);
+  --accent-google-hover: hsl(152, 75%, 32%);
+  
+  --border-color: hsl(214, 30%, 85%);
+  --border-glow: hsla(212, 100%, 48%, 0.1);
+  --shadow-lg: 0 10px 20px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05);
+}
+
+/* General Resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+a {
+  color: var(--accent-wikimedia);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+a:hover {
+  color: var(--accent-wikimedia-hover);
+  text-decoration: underline;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Common Classes for Layout */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition-smooth);
+}
+
+.glass-panel:hover {
+  border-color: hsla(212, 100%, 55%, 0.3);
+  box-shadow: 0 0 20px var(--border-glow);
+}
+
+/* Form Controls */
+input, select, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent-wikimedia);
+  box-shadow: 0 0 0 3px var(--border-glow);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-family);
+  font-weight: 500;
+  transition: var(--transition-smooth);
+  border-radius: var(--radius-md);
+}
+
+/* Micro-animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
