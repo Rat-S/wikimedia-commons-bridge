@@ -1,3 +1,4 @@
+import os
 import logging
 import urllib.parse
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -18,9 +19,27 @@ USER_AGENT = "WikimediaCommonsBridge/1.0 (https://github.com/anu/wikimedia-commo
 
 @router.get("/login")
 async def wikimedia_login(
+    db: AsyncSession = Depends(get_db),
     session_id: str = Depends(get_session_id)
 ):
-    """Initiate Wikimedia OAuth 2.0 flow by redirecting the user to Meta-Wiki."""
+    if settings.mock_wikimedia:
+        logger.info(f"Bypassing Wikimedia login for session {session_id} using mock account.")
+        # Ensure session exists
+        session = await get_user_session(db, session_id)
+        if not session:
+            from app.session import create_user_session
+            await create_user_session(db, session_id)
+            
+        await update_wikimedia_session_tokens(
+            db=db,
+            session_id=session_id,
+            access_token="mock-wikimedia-access-token",
+            expires_in=31536000,  # 1 year
+            username="MockWikiUser",
+            refresh_token="mock-wikimedia-refresh-token"
+        )
+        return RedirectResponse(url=f"{settings.frontend_url}/?wikimedia=connected&username=MockWikiUser")
+
     wikimedia_auth_url = "https://meta.wikimedia.org/w/rest.php/oauth2/authorize"
     
     params = {
@@ -127,6 +146,12 @@ async def wikimedia_status(
     session: UserSession = Depends(get_current_session)
 ):
     """Check if the user is connected to Wikimedia and return their username."""
+    if settings.mock_wikimedia:
+        return {
+            "connected": True,
+            "username": "MockWikiUser"
+        }
+    
     is_connected = session.wikimedia_access_token is not None
     return {
         "connected": is_connected,

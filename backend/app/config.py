@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     # Wikimedia OAuth credentials
     wikimedia_client_id: str = Field(default="", validation_alias="WIKIMEDIA_CLIENT_ID")
     wikimedia_client_secret: str = Field(default="", validation_alias="WIKIMEDIA_CLIENT_SECRET")
+    mock_wikimedia: bool = Field(default=False, validation_alias="MOCK_WIKIMEDIA")
 
     # App Settings
     base_url: str = Field(default="http://localhost:8000", validation_alias="BASE_URL")
