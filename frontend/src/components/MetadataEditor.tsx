@@ -89,6 +89,26 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
     });
   };
 
+  const copyFieldToAll = (field: keyof CuratedMediaItem) => {
+    if (!activeItem) return;
+    const value = activeItem[field];
+    setCuratedItems(prev => prev.map(item => ({
+      ...item,
+      [field]: value
+    })));
+  };
+
+  const copyAllFieldsToAll = () => {
+    if (!activeItem) return;
+    setCuratedItems(prev => prev.map(item => ({
+      ...item,
+      description: activeItem.description,
+      date: activeItem.date,
+      license_code: activeItem.license_code,
+      categories: [...activeItem.categories]
+    })));
+  };
+
   // Helper validation
   const validateItem = (item: CuratedMediaItem) => {
     if (!item) return false;
@@ -347,6 +367,30 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
 
         {/* Right column: Single Item Editor Form */}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", maxHeight: "500px", overflowY: "auto", paddingRight: "4px" }}>
+          {curatedItems.length > 1 && (
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "4px" }}>
+              <button
+                type="button"
+                onClick={copyAllFieldsToAll}
+                style={{
+                  fontSize: "0.8rem",
+                  fontWeight: 600,
+                  color: "var(--accent-wikimedia)",
+                  background: "var(--bg-secondary)",
+                  border: "1px solid var(--border-color)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "6px 12px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px"
+                }}
+              >
+                <Layers size={14} /> Copy All Fields to All Images
+              </button>
+            </div>
+          )}
+
           <div>
             <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>
               File Title (descriptive, with extension)
@@ -364,9 +408,20 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
           </div>
 
           <div>
-            <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>
-              Description (English, min 8 chars)
-            </label>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+              <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", margin: 0 }}>
+                Description (English, min 8 chars)
+              </label>
+              {curatedItems.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => copyFieldToAll("description")}
+                  style={{ fontSize: "0.75rem", color: "var(--accent-wikimedia)", background: "none", border: "none", padding: 0, cursor: "pointer", textDecoration: "underline" }}
+                >
+                  Copy to all
+                </button>
+              )}
+            </div>
             <textarea
               rows={3}
               placeholder="Describe what is depicted in the photo..."
@@ -380,9 +435,20 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
           </div>
 
           <div>
-            <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>
-              Creation Date (YYYY-MM-DD)
-            </label>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+              <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", margin: 0 }}>
+                Creation Date (YYYY-MM-DD)
+              </label>
+              {curatedItems.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => copyFieldToAll("date")}
+                  style={{ fontSize: "0.75rem", color: "var(--accent-wikimedia)", background: "none", border: "none", padding: 0, cursor: "pointer", textDecoration: "underline" }}
+                >
+                  Copy to all
+                </button>
+              )}
+            </div>
             <input
               type="date"
               value={activeItem.date}
@@ -391,9 +457,20 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
           </div>
 
           <div>
-            <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>
-              License
-            </label>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+              <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", margin: 0 }}>
+                License
+              </label>
+              {curatedItems.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => copyFieldToAll("license_code")}
+                  style={{ fontSize: "0.75rem", color: "var(--accent-wikimedia)", background: "none", border: "none", padding: 0, cursor: "pointer", textDecoration: "underline" }}
+                >
+                  Copy to all
+                </button>
+              )}
+            </div>
             <select
               value={activeItem.license_code}
               onChange={(e) => updateActiveField("license_code", e.target.value)}
@@ -409,6 +486,7 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
               selectedCategories={activeItem.categories}
               onAddCategory={(cat) => updateActiveField("categories", [...activeItem.categories, cat])}
               onRemoveCategory={(cat) => updateActiveField("categories", activeItem.categories.filter(c => c !== cat))}
+              onCopyToAll={curatedItems.length > 1 ? () => copyFieldToAll("categories") : undefined}
             />
           </div>
 

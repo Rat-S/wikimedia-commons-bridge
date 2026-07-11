@@ -5,12 +5,14 @@ interface CategorySearchProps {
   selectedCategories: string[];
   onAddCategory: (category: string) => void;
   onRemoveCategory: (category: string) => void;
+  onCopyToAll?: () => void;
 }
 
 export const CategorySearch: React.FC<CategorySearchProps> = ({
   selectedCategories,
   onAddCategory,
   onRemoveCategory,
+  onCopyToAll,
 }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<string[]>([]);
@@ -86,9 +88,20 @@ export const CategorySearch: React.FC<CategorySearchProps> = ({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
-      <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)" }}>
-        Add Commons Categories
-      </label>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", margin: 0 }}>
+          Add Commons Categories
+        </label>
+        {onCopyToAll && (
+          <button
+            type="button"
+            onClick={onCopyToAll}
+            style={{ fontSize: "0.75rem", color: "var(--accent-wikimedia)", background: "none", border: "none", padding: 0, cursor: "pointer", textDecoration: "underline" }}
+          >
+            Copy to all
+          </button>
+        )}
+      </div>
 
       {/* Input Autocomplete Box */}
       <div style={{ position: "relative" }} ref={dropdownRef}>

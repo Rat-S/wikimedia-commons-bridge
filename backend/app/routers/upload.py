@@ -75,7 +75,8 @@ async def run_background_upload(
     commons_filename: str,
     wikitext: str,
     wikimedia_token: str,
-    google_token: str
+    google_token: str,
+    license_code: str
 ):
     tracker.update_progress(job_id, 0, 100)
     
@@ -90,6 +91,7 @@ async def run_background_upload(
             media_url=google_media_url,
             commons_filename=commons_filename,
             wikitext=wikitext,
+            license_code=license_code,
             on_progress=on_progress
         )
         tracker.mark_success(
@@ -139,7 +141,8 @@ async def start_upload_job(
         commons_filename=request.commons_filename,
         wikitext=wikitext,
         wikimedia_token=wikimedia_token,
-        google_token=google_token
+        google_token=google_token,
+        license_code=request.license_code
     )
     
     return {

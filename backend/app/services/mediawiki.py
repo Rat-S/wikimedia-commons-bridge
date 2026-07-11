@@ -1,4 +1,5 @@
 import logging
+import json
 from typing import Dict, Any, Callable, Awaitable, Optional
 import httpx
 from fastapi import HTTPException
@@ -41,6 +42,7 @@ async def upload_file_in_chunks(
     media_url: str,
     commons_filename: str,
     wikitext: str,
+    license_code: str,
     on_progress: Optional[Callable[[int, int], Awaitable[None]]] = None
 ) -> Dict[str, Any]:
     """
@@ -176,6 +178,18 @@ async def upload_file_in_chunks(
             if upload_result.get("result") == "Success":
                 imageinfo = upload_result.get("imageinfo", {})
                 logger.info(f"Upload completed successfully for file: {commons_filename}")
+                
+                # Set Structured Data on Commons (SDC) copyright and license claims
+                pageid = upload_result.get("pageid")
+                if pageid:
+                    await set_file_structured_data(
+                        client=client,
+                        access_token=wikimedia_token,
+                        csrf_token=csrf_token,
+                        pageid=pageid,
+                        license_code=license_code
+                    )
+                
                 return {
                     "status": "success",
                     "filename": upload_result.get("filename"),
@@ -217,4 +231,95 @@ async def get_user_rate_limits(access_token: str) -> Dict[str, Any]:
         except httpx.RequestError as exc:
             logger.warning(f"Connection failure checking user rate limits: {exc}")
             return {}
+
+async def set_file_structured_data(
+    client: httpx.AsyncClient,
+    access_token: str,
+    csrf_token: str,
+    pageid: int,
+    license_code: str
+) -> bool:
+    """Set the copyright status (P6216) and copyright license (P275) in Structured Data on Commons (SDC)."""
+    # 1. Map license_code to QIDs
+    # P6216 QID
+    status_qid = "Q50423863"  # default to "copyrighted"
+    
+    # P275 QID
+    code = license_code.lower().strip()
+    if code in ("cc-by-sa-4.0", "cc-by-sa"):
+        license_qid = "Q18199165"
+    elif code in ("cc-by-4.0", "cc-by"):
+        license_qid = "Q20007257"
+    elif code in ("cc0-1.0", "cc0", "public-domain"):
+        license_qid = "Q6938433"
+        status_qid = "Q19643"  # CC0 is public domain dedication
+    else:
+        license_qid = "Q18199165"  # fallback default CC BY-SA 4.0
+        
+    claims = [
+        # Copyright Status (P6216) -> status_qid
+        {
+            "mainsnak": {
+                "snaktype": "value",
+                "property": "P6216",
+                "datavalue": {
+                    "value": {
+                        "entity-type": "item",
+                        "id": status_qid
+                    },
+                    "type": "wikibase-entityid"
+                }
+            },
+            "type": "statement",
+            "rank": "normal"
+        },
+        # Copyright License (P275) -> license_qid
+        {
+            "mainsnak": {
+                "snaktype": "value",
+                "property": "P275",
+                "datavalue": {
+                    "value": {
+                        "entity-type": "item",
+                        "id": license_qid
+                    },
+                    "type": "wikibase-entityid"
+                }
+            },
+            "type": "statement",
+            "rank": "normal"
+        }
+    ]
+    
+    post_data = {
+        "action": "wbeditentity",
+        "id": f"M{pageid}",
+        "token": csrf_token,
+        "format": "json",
+        "data": json.dumps({"claims": claims}),
+        "summary": "Adding structured copyright and license data via Commons Bridge"
+    }
+    
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "User-Agent": USER_AGENT
+    }
+    
+    try:
+        logger.info(f"Setting SDC copyright claims for page M{pageid} (license={license_code})...")
+        resp = await client.post(COMMONS_API_URL, data=post_data, headers=headers)
+        if resp.status_code != 200:
+            logger.warning(f"Failed to set SDC claims for page {pageid}: {resp.text}")
+            return False
+            
+        data = resp.json()
+        if "error" in data:
+            logger.warning(f"SDC API error: {data['error']}")
+            return False
+            
+        logger.info(f"Successfully set SDC copyright status and license for page {pageid}.")
+        return True
+    except Exception as exc:
+        logger.warning(f"Failed to post SDC claims for page {pageid}: {exc}")
+        return False
 
