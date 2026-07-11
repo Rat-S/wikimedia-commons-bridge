@@ -97,7 +97,7 @@ class GooglePhotosPickerProvider(PhotoProvider):
                         "id": item.get("id"),
                         "filename": media_file.get("filename"),
                         "mime_type": media_file.get("mimeType"),
-                        "creation_time": metadata.get("creationTime"),
+                        "creation_time": item.get("createTime"),
                         "width": int(metadata.get("width", 0)) if metadata.get("width") else 0,
                         "height": int(metadata.get("height", 0)) if metadata.get("height") else 0,
                         "base_url": media_file.get("baseUrl")
@@ -146,5 +146,5 @@ class GooglePhotosPickerProvider(PhotoProvider):
                         detail="Failed to stream media bytes from Google Photos"
                     )
                 
-                async for chunk in response.iter_bytes(chunk_size=1024 * 1024):  # 1MB chunks
+                async for chunk in response.aiter_bytes(chunk_size=1024 * 1024):  # 1MB chunks
                     yield chunk

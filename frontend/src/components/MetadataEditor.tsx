@@ -281,6 +281,7 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
                 <img
                   src={api.getProxyUrl(`${item.base_url}=w150-h150-c`)}
                   alt={item.filename}
+                  crossOrigin="use-credentials"
                   style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "4px" }}
                 />
                 {isValid && (
@@ -327,6 +328,7 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
             <img
               src={api.getProxyUrl(`${activeItem.base_url}=w800`)}
               alt={activeItem.commons_filename}
+              crossOrigin="use-credentials"
               style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
             />
           </div>

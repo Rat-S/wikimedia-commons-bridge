@@ -155,7 +155,8 @@ async def upload_file_in_chunks(
             "token": csrf_token,
             "filekey": filekey,
             "text": wikitext,
-            "comment": "Transferred from Google Photos via Commons Bridge"
+            "comment": "Transferred from Google Photos via Commons Bridge",
+            "ignorewarnings": "1"  # Ignore warnings like badfilename, duplicates, etc.
         }
         
         try:

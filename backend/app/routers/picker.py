@@ -114,7 +114,7 @@ async def proxy_media(
                     if resp.status_code != 200:
                         logger.error(f"Proxy request failed for {url}: {resp.status_code}")
                         return
-                    async for chunk in resp.iter_bytes():
+                    async for chunk in resp.aiter_bytes():
                         yield chunk
             except Exception as exc:
                 logger.error(f"Error during proxy streaming: {exc}")
