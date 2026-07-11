@@ -91,3 +91,33 @@ async def get_picked_media_items(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to fetch selected photos: {exc}"
         )
+
+@router.get("/proxy")
+async def proxy_media(
+    url: str,
+    db: AsyncSession = Depends(get_db),
+    session: UserSession = Depends(get_current_session)
+):
+    """Proxy image requests from Google Photos Picker API using the user's session token."""
+    import httpx
+    from fastapi.responses import StreamingResponse
+    
+    access_token = await ensure_google_token(db, session)
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+    
+    async def stream_image():
+        async with httpx.AsyncClient() as client:
+            try:
+                async with client.stream("GET", url, headers=headers) as resp:
+                    if resp.status_code != 200:
+                        logger.error(f"Proxy request failed for {url}: {resp.status_code}")
+                        return
+                    async for chunk in resp.iter_bytes():
+                        yield chunk
+            except Exception as exc:
+                logger.error(f"Error during proxy streaming: {exc}")
+                return
+
+    return StreamingResponse(stream_image(), media_type="image/jpeg")

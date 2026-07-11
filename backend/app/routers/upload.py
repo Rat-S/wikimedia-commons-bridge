@@ -74,7 +74,8 @@ async def run_background_upload(
     google_media_url: str,
     commons_filename: str,
     wikitext: str,
-    wikimedia_token: str
+    wikimedia_token: str,
+    google_token: str
 ):
     tracker.update_progress(job_id, 0, 100)
     
@@ -84,7 +85,8 @@ async def run_background_upload(
         
     try:
         result = await upload_file_in_chunks(
-            access_token=wikimedia_token,
+            wikimedia_token=wikimedia_token,
+            google_token=google_token,
             media_url=google_media_url,
             commons_filename=commons_filename,
             wikitext=wikitext,
@@ -136,7 +138,8 @@ async def start_upload_job(
         google_media_url=request.media_url,
         commons_filename=request.commons_filename,
         wikitext=wikitext,
-        wikimedia_token=wikimedia_token
+        wikimedia_token=wikimedia_token,
+        google_token=google_token
     )
     
     return {

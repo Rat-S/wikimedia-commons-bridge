@@ -36,7 +36,8 @@ async def get_csrf_token(client: httpx.AsyncClient, access_token: str) -> str:
     return token
 
 async def upload_file_in_chunks(
-    access_token: str,
+    wikimedia_token: str,
+    google_token: str,
     media_url: str,
     commons_filename: str,
     wikitext: str,
@@ -46,8 +47,9 @@ async def upload_file_in_chunks(
     Download a file from Google Photos and upload it to Wikimedia Commons in chunks.
     Pipes bytes directly in-memory without saving local files.
     """
-    headers = {
-        "User-Agent": USER_AGENT
+    google_headers = {
+        "User-Agent": USER_AGENT,
+        "Authorization": f"Bearer {google_token}"
     }
     
     # Request the original quality image from Google
@@ -56,7 +58,7 @@ async def upload_file_in_chunks(
     async with httpx.AsyncClient() as client:
         # 1. Fetch file size and initiate stream from Google
         try:
-            google_resp = await client.get(download_url, timeout=60.0)
+            google_resp = await client.get(download_url, headers=google_headers, timeout=60.0)
             if google_resp.status_code != 200:
                 logger.error(f"Failed to fetch media from Google: {google_resp.status_code}")
                 raise HTTPException(status_code=google_resp.status_code, detail="Failed to retrieve photo bytes from Google Photos")
@@ -75,14 +77,14 @@ async def upload_file_in_chunks(
             raise HTTPException(status_code=500, detail=f"Failed to connect to Google Photos server: {exc}")
 
         # 2. Get CSRF Token from MediaWiki
-        csrf_token = await get_csrf_token(client, access_token)
+        csrf_token = await get_csrf_token(client, wikimedia_token)
         
         # 3. Perform chunked uploads
         filekey = None
         offset = 0
         
         mw_headers = {
-            "Authorization": f"Bearer {access_token}",
+            "Authorization": f"Bearer {wikimedia_token}",
             "User-Agent": USER_AGENT
         }
         

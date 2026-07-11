@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { api } from "../api/client";
 import type { MediaItem } from "../api/client";
 import { CategorySearch } from "./CategorySearch";
 import { Check, Edit3, Grid, Layers, Sparkles, Globe, FileText, CheckCircle, Info } from "lucide-react";
@@ -52,14 +53,15 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
       }
 
       // Propose clean filename: replace spaces/special chars, keep extension
-      const extIndex = item.filename.lastIndexOf(".");
-      const nameWithoutExt = extIndex !== -1 ? item.filename.substring(0, extIndex) : item.filename;
-      const ext = extIndex !== -1 ? item.filename.substring(extIndex) : ".jpg";
+      const itemFilename = item.filename || `photo_${item.id}.jpg`;
+      const extIndex = itemFilename.lastIndexOf(".");
+      const nameWithoutExt = extIndex !== -1 ? itemFilename.substring(0, extIndex) : itemFilename;
+      const ext = extIndex !== -1 ? itemFilename.substring(extIndex) : ".jpg";
       const cleanName = nameWithoutExt.replace(/[^a-zA-Z0-9_-]/g, "_") + ext;
 
       return {
         id: item.id,
-        filename: item.filename,
+        filename: itemFilename,
         mime_type: item.mime_type,
         creation_time: item.creation_time,
         base_url: item.base_url,
@@ -277,7 +279,7 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
                 }}
               >
                 <img
-                  src={`${item.base_url}=w150-h150-c`}
+                  src={api.getProxyUrl(`${item.base_url}=w150-h150-c`)}
                   alt={item.filename}
                   style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "4px" }}
                 />
@@ -323,7 +325,7 @@ export const MetadataEditor: React.FC<MetadataEditorProps> = ({
             }}
           >
             <img
-              src={`${activeItem.base_url}=w800`}
+              src={api.getProxyUrl(`${activeItem.base_url}=w800`)}
               alt={activeItem.commons_filename}
               style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
             />

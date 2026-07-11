@@ -54,14 +54,6 @@ export const PickerLauncher: React.FC<PickerLauncherProps> = ({ googleConnected,
 
       // 3. Start Polling Loop
       pollIntervalRef.current = window.setInterval(async () => {
-        // If popup was closed manually by the user, stop polling
-        if (popupRef.current && popupRef.current.closed) {
-          stopPolling();
-          setLoading(false);
-          setError("Selection window was closed before completing.");
-          return;
-        }
-
         try {
           const pollResult = await api.pollPickerSession(picker_session_id);
           if (pollResult.ready) {
@@ -188,6 +180,25 @@ export const PickerLauncher: React.FC<PickerLauncherProps> = ({ googleConnected,
           </>
         )}
       </button>
+      
+      {polling && (
+        <button
+          onClick={() => {
+            stopPolling();
+            setLoading(false);
+          }}
+          style={{
+            marginTop: "-12px",
+            padding: "8px 16px",
+            backgroundColor: "transparent",
+            color: "var(--text-muted)",
+            fontSize: "0.9rem",
+            textDecoration: "underline",
+          }}
+        >
+          Cancel Selection
+        </button>
+      )}
 
       {!googleConnected && (
         <p style={{ fontSize: "0.8rem", color: "var(--danger)" }}>

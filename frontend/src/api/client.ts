@@ -96,6 +96,10 @@ export interface RateLimitsResponse {
 }
 
 export const api = {
+  // Google Photos CDN Proxy URL Helper
+  getProxyUrl: (url: string): string => 
+    `${API_BASE_URL}/picker/proxy?url=${encodeURIComponent(url)}`,
+
   // Google OAuth Status
   getGoogleStatus: (): Promise<GoogleStatus> => 
     def_fetch("/auth/google/status"),

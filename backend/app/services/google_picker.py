@@ -87,17 +87,20 @@ class GooglePhotosPickerProvider(PhotoProvider):
                 data = response.json()
                 media_items = data.get("mediaItems", [])
                 
-                # Normalize response keys to match generic interface
+                 # Normalize response keys to match generic interface
                 normalized_items = []
                 for item in media_items:
+                    media_file = item.get("mediaFile", {})
+                    metadata = media_file.get("mediaFileMetadata", {})
+                    
                     normalized_items.append({
                         "id": item.get("id"),
-                        "filename": item.get("filename"),
-                        "mime_type": item.get("mimeType"),
-                        "creation_time": item.get("creationTime"),
-                        "width": int(item.get("width", 0)),
-                        "height": int(item.get("height", 0)),
-                        "base_url": item.get("baseUrl")
+                        "filename": media_file.get("filename"),
+                        "mime_type": media_file.get("mimeType"),
+                        "creation_time": metadata.get("creationTime"),
+                        "width": int(metadata.get("width", 0)) if metadata.get("width") else 0,
+                        "height": int(metadata.get("height", 0)) if metadata.get("height") else 0,
+                        "base_url": media_file.get("baseUrl")
                     })
                 return normalized_items
             except httpx.RequestError as exc:
@@ -125,14 +128,17 @@ class GooglePhotosPickerProvider(PhotoProvider):
     async def stream_media_bytes(self, access_token: str, media_url: str) -> AsyncGenerator[bytes, None]:
         """
         Stream high-resolution image bytes.
-        Google Photos base_url does not require authorization header and lasts 60 minutes.
+        Google Photos base_url in the new Picker API requires authorization header.
         We append '=d' to baseUrl to get the original/download quality.
         """
         # Append download flag to request original size
         download_url = f"{media_url}=d" if not media_url.endswith("=d") else media_url
+        headers = {
+            "Authorization": f"Bearer {access_token}"
+        }
         
         async with httpx.AsyncClient() as client:
-            async with client.stream("GET", download_url, timeout=60.0) as response:
+            async with client.stream("GET", download_url, headers=headers, timeout=60.0) as response:
                 if response.status_code != 200:
                     logger.error(f"Failed to stream media from Google Photos URL: {response.status_code}")
                     raise HTTPException(

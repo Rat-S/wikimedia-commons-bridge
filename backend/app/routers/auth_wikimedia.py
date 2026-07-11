@@ -40,7 +40,7 @@ async def wikimedia_login(
         )
         return RedirectResponse(url=f"{settings.frontend_url}/?wikimedia=connected&username=MockWikiUser")
 
-    wikimedia_auth_url = "https://meta.wikimedia.org/w/rest.php/oauth2/authorize"
+    wikimedia_auth_url = "https://commons.wikimedia.org/w/rest.php/oauth2/authorize"
     
     params = {
         "client_id": settings.wikimedia_client_id,
@@ -74,7 +74,7 @@ async def wikimedia_callback(
         return RedirectResponse(url=f"{settings.frontend_url}/?error=session_mismatch")
 
     # Exchange code for access token
-    token_url = "https://meta.wikimedia.org/w/rest.php/oauth2/access_token"
+    token_url = "https://commons.wikimedia.org/w/rest.php/oauth2/access_token"
     token_data = {
         "client_id": settings.wikimedia_client_id,
         "client_secret": settings.wikimedia_client_secret,
@@ -100,7 +100,7 @@ async def wikimedia_callback(
             refresh_token = tokens.get("refresh_token")
             
             # Fetch user profile to retrieve the Wikimedia username
-            profile_url = "https://meta.wikimedia.org/w/rest.php/oauth2/resource/profile"
+            profile_url = "https://commons.wikimedia.org/w/rest.php/oauth2/resource/profile"
             profile_headers = {
                 "Authorization": f"Bearer {access_token}",
                 "User-Agent": USER_AGENT

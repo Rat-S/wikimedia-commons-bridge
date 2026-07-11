@@ -187,7 +187,7 @@ async def ensure_wikimedia_token(db: AsyncSession, session: UserSession) -> str:
         import httpx
         from app.config import settings
         
-        token_url = "https://meta.wikimedia.org/w/rest.php/oauth2/access_token"
+        token_url = "https://commons.wikimedia.org/w/rest.php/oauth2/access_token"
         refresh_data = {
             "client_id": settings.wikimedia_client_id,
             "client_secret": settings.wikimedia_client_secret,
