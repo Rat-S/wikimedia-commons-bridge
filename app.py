@@ -12,4 +12,9 @@ if os.path.exists(env_file):
     from dotenv import load_dotenv
     load_dotenv(env_file)
 
-from app.main import app
+from app.main import app as fastapi_app
+from a2wsgi import ASGIMiddleware
+
+# Wrap FastAPI (ASGI) for Toolforge uWSGI server
+app = ASGIMiddleware(fastapi_app)
+
