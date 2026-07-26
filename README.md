@@ -76,3 +76,10 @@ graph TD
    ./run.sh
    ```
 4. Access the web app at `http://localhost:5173`.
+
+---
+
+## License
+
+This project is licensed under the **GNU Affero General Public License v3.0** (AGPL-3.0). See the [LICENSE](file:///home/anu/Workspace/Biz/Wikimedia/Google%20Photos%20to%20Wikimedia%20Commons/LICENSE) file for the full text.
+

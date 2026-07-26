@@ -56,3 +56,12 @@ def google_site_verification(verification_file: str):
     
     # Otherwise, raise a 404 error
     raise HTTPException(status_code=404, detail="File not found")
+
+# Serve React Frontend Production Build (Toolforge single-origin deployment)
+import os
+from fastapi.staticfiles import StaticFiles
+
+frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/dist"))
+if os.path.exists(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="static")
+
