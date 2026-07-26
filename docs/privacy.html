@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Wikimedia Commons Bridge</title>
+    <meta name="description" content="Privacy Policy for the Wikimedia Commons Bridge application, detailing Google API data usage and compliance.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--primary); }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        nav a:hover { color: var(--text-main); }
+
+        nav a.nav-btn {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        nav a.nav-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        main {
+            flex: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .last-updated {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+
+        p, ul {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            color: #cbd5e1;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        footer a { color: var(--text-muted); text-decoration: none; }
+        footer a:hover { color: var(--text-main); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span>Wikimedia Commons</span> Bridge</a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="https://bridge.toolforge.org/" class="nav-btn" target="_blank" rel="noopener">Open App</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1>Privacy Policy</h1>
+        <div class="last-updated">Effective Date: July 26, 2026</div>
+
+        <section>
+            <h2>1. Introduction</h2>
+            <p>The <strong>Wikimedia Commons Bridge</strong> ("the Application", "we", "our"), hosted on Wikimedia Toolforge at <a href="https://bridge.toolforge.org/" target="_blank" rel="noopener" style="color:#60a5fa;">https://bridge.toolforge.org/</a>, is an open-source tool designed to facilitate the curation and publication of user-selected photos from Google Photos to Wikimedia Commons under open licenses. We value your privacy and are committed to protecting any information processed while using our service.</p>
+        </section>
+
+        <section>
+            <h2>2. Google API Data Access & Scopes</h2>
+            <p>The Application integrates with Google API Services, specifically utilizing the official <strong>Google Photos Picker API</strong> (OAuth Scope: <code>https://www.googleapis.com/auth/photospicker.mediaitems.readonly</code>).</p>
+            <div class="highlight-box">
+                <strong>Important Notice on Data Access:</strong> The Application uses the Google Photos Picker API. This means the Application <strong>never receives access to your full Google Photos library</strong>. You interact with an isolated Google-hosted selection screen, and the Application only receives metadata and access tokens for the specific photo(s) that you explicitly choose to select.
+            </div>
+        </section>
+
+        <section>
+            <h2>3. How Information Is Used</h2>
+            <p>Information retrieved via Google APIs is used strictly for the following purposes:</p>
+            <ul>
+                <li><strong>Photo Selection & Display:</strong> Displaying high-resolution previews in your active browser session while you curate metadata (captions, categories, descriptions).</li>
+                <li><strong>Direct Media Streaming:</strong> Transferring binary photo streams directly to the MediaWiki / Wikimedia Commons API upon your explicit command ("Publish").</li>
+                <li><strong>EXIF Date Extraction:</strong> Reading photo creation timestamps to automatically suggest accurate publication dates for Wikimedia Commons metadata.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Data Retention and Storage</h2>
+            <ul>
+                <li><strong>No Persistent Media Storage:</strong> Photos are processed in memory during transfer. We do not write or store your photos on intermediate server disks.</li>
+                <li><strong>Session Tokens:</strong> OAuth 2.0 authentication tokens are securely persisted in transient session storage solely to execute requests on your behalf while you are logged in. Logging out destroys the active session.</li>
+                <li><strong>No Third-Party Sharing or Sale:</strong> We do not sell, rent, trade, or share user data or Google API data with any third parties or advertising networks.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>5. Compliance with Google Limited Use Policy</h2>
+            <p>The Application's use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener" style="color:#60a5fa;">Google API Services User Data Policy</a>, including the <strong>Limited Use</strong> requirements.</p>
+        </section>
+
+        <section>
+            <h2>6. Public Disclosure on Wikimedia Commons</h2>
+            <p>When you choose to upload a photo to Wikimedia Commons, the media file and associated metadata (captions, descriptions, licenses, author credits) become publicly available on Wikimedia Commons under the open license you selected (e.g., CC BY-SA 4.0 or CC0 1.0) in accordance with Wikimedia policies.</p>
+        </section>
+
+        <section>
+            <h2>7. Revoking Access & Contact</h2>
+            <p>You can revoke the Application's access to your Google Account at any time via <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener" style="color:#60a5fa;">Google Account Third-party apps & services settings</a>.</p>
+            <p>If you have questions about this Privacy Policy, please contact the maintainers via our public GitHub repository.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="https://bridge.toolforge.org/" target="_blank" rel="noopener">Launch App</a>
+            <a href="index.html">Home</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>
+        </div>
+        <p>&copy; 2026 Wikimedia Commons Bridge. Open source under AGPL-3.0 License.</p>
+    </footer>
+</body>
+</html>

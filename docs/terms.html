@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Wikimedia Commons Bridge</title>
+    <meta name="description" content="Terms of Service for using the Wikimedia Commons Bridge application.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--primary); }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        nav a:hover { color: var(--text-main); }
+
+        nav a.nav-btn {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        nav a.nav-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        main {
+            flex: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .last-updated {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+
+        p, ul {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        ul { padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        footer a { color: var(--text-muted); text-decoration: none; }
+        footer a:hover { color: var(--text-main); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span>Wikimedia Commons</span> Bridge</a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="https://bridge.toolforge.org/" class="nav-btn" target="_blank" rel="noopener">Open App</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1>Terms of Service</h1>
+        <div class="last-updated">Effective Date: July 26, 2026</div>
+
+        <section>
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing or using the <strong>Wikimedia Commons Bridge</strong> ("the Service"), hosted at <a href="https://bridge.toolforge.org/" target="_blank" rel="noopener" style="color:#60a5fa;">https://bridge.toolforge.org/</a>, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service.</p>
+        </section>
+
+        <section>
+            <h2>2. Purpose of the Service</h2>
+            <p>The Service provides a technical bridge allowing users to select personal photos stored in Google Photos and publish them directly to Wikimedia Commons under open content licenses.</p>
+        </section>
+
+        <section>
+            <h2>3. User Warranties & Copyright Compliance</h2>
+            <p>By uploading media to Wikimedia Commons using this Service, you represent and warrant that:</p>
+            <ul>
+                <li>You are the sole owner of the copyright of the media, or you have explicit authorization from the copyright holder to release the media.</li>
+                <li>The media does not infringe upon any third-party intellectual property, privacy, publicity, or proprietary rights.</li>
+                <li>You agree to release the selected media under an acceptable <a href="https://commons.wikimedia.org/wiki/Commons:Licensing" target="_blank" rel="noopener" style="color:#60a5fa;">Wikimedia Commons Open License</a> (such as CC BY-SA 4.0 or CC0 1.0), acknowledging that uploaded media cannot easily be revoked.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Third-Party Services & API Usage</h2>
+            <p>The Service relies on APIs provided by Google LLC and the Wikimedia Foundation. Your use of the Service is also subject to:</p>
+            <ul>
+                <li><a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:#60a5fa;">Google Terms of Service</a></li>
+                <li><a href="https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use" target="_blank" rel="noopener" style="color:#60a5fa;">Wikimedia Terms of Use</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>5. Disclaimer of Warranties</h2>
+            <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.</p>
+        </section>
+
+        <section>
+            <h2>6. Limitation of Liability</h2>
+            <p>IN NO EVENT SHALL THE DEVELOPERS OR MAINTAINERS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF YOUR USE OF OR INABILITY TO USE THE SERVICE.</p>
+        </section>
+
+        <section>
+            <h2>7. Changes to Terms</h2>
+            <p>We reserve the right to modify these Terms at any time. Continued use of the Service following any updates constitutes acceptance of the new Terms.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="https://bridge.toolforge.org/" target="_blank" rel="noopener">Launch App</a>
+            <a href="index.html">Home</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>
+        </div>
+        <p>&copy; 2026 Wikimedia Commons Bridge. Open source under AGPL-3.0 License.</p>
+    </footer>
+</body>
+</html>
