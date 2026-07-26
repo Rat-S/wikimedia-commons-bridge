@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { api } from "../api/client";
 import type { MediaItem } from "../api/client";
 import { CategorySearch } from "./CategorySearch";
-import { Check, Edit3, Grid, Layers, Sparkles, Globe, FileText, CheckCircle, Info } from "lucide-react";
+import { Check, Layers, Sparkles, Globe, FileText, CheckCircle, Info } from "lucide-react";
 
 export interface CuratedMediaItem {
   id: string;
