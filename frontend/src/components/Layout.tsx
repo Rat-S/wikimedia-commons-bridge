@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Sun, Moon, Info, Shield } from "lucide-react";
+import { Sun, Moon, Info, Shield, ExternalLink } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -55,6 +55,45 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <a
+            href="https://wikimedia-bridge.covai.org/"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              color: "var(--text-secondary)",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              fontSize: "0.85rem",
+              textDecoration: "none",
+            }}
+            title="About & Privacy Policy"
+          >
+            <ExternalLink size={16} />
+            <span>About</span>
+          </a>
+
+          <a
+            href="https://github.com/Rat-S/wikimedia-commons-bridge"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              color: "var(--text-secondary)",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "0.85rem",
+              textDecoration: "none",
+            }}
+            title="GitHub Repository"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+              <path d="M9 18c-4.51 2-5-2-7-2"></path>
+            </svg>
+            <span>GitHub</span>
+          </a>
+
           {/* Light/Dark mode toggler */}
           <button
             onClick={toggleTheme}
@@ -65,6 +104,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              cursor: "pointer",
+              border: "none",
             }}
             title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
@@ -89,13 +130,23 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           fontSize: "0.85rem",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
           <Info size={16} />
           <span>Open-source community tool hosted on Wikimedia Toolforge.</span>
         </div>
-        <p>
-          Subject to <a href="https://commons.wikimedia.org/wiki/Commons:Policies_and_guidelines" target="_blank" rel="noreferrer">Commons policies</a> and Google API terms of use.
-        </p>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
+          <a href="https://wikimedia-bridge.covai.org/" target="_blank" rel="noreferrer" style={{ color: "var(--text-secondary)", textDecoration: "underline" }}>
+            About & Privacy Policy
+          </a>
+          <span>•</span>
+          <a href="https://github.com/Rat-S/wikimedia-commons-bridge" target="_blank" rel="noreferrer" style={{ color: "var(--text-secondary)", textDecoration: "underline" }}>
+            GitHub Repository
+          </a>
+          <span>•</span>
+          <a href="https://commons.wikimedia.org/wiki/Commons:Policies_and_guidelines" target="_blank" rel="noreferrer" style={{ color: "var(--text-secondary)", textDecoration: "underline" }}>
+            Commons Policies
+          </a>
+        </div>
       </footer>
     </div>
   );
