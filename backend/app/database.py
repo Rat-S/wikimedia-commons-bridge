@@ -8,6 +8,8 @@ connect_args = {}
 if settings.database_url.startswith("sqlite"):
     # SQLite requires setting check_same_thread to False for multithreaded environments
     connect_args["check_same_thread"] = False
+elif "mysql" in settings.database_url or "mariadb" in settings.database_url:
+    connect_args["ssl"] = False
 
 engine = create_async_engine(
     settings.database_url,
