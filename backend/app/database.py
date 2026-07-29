@@ -29,7 +29,16 @@ from sqlalchemy.orm import DeclarativeBase
 class Base(DeclarativeBase):
     pass
 
+_db_initialized = False
+
 async def get_db() -> AsyncSession:
     """Dependency to retrieve the database session."""
+    global _db_initialized
+    if not _db_initialized:
+        from app.models.session import UserSession  # Ensure models are registered
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        _db_initialized = True
+
     async with AsyncSessionLocal() as session:
         yield session
