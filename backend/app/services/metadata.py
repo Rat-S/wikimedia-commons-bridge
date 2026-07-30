@@ -62,7 +62,7 @@ def generate_commons_wikitext(
 {{{{Information
 |description    = {{{{en|1={description}}}}}
 |date           = {final_date}
-|source         = {{{{Own photo}}}} — transferred from Google Photos via [[toolforge:commons-bridge|Commons Bridge]]
+|source         = {{{{Own photo}}}} — transferred from Google Photos via [[toolforge:bridge|Commons Bridge]]
 |author         = [[User:{author_username}|{author_username}]]
 |permission     =
 |other versions =
