@@ -15,47 +15,53 @@ from app.services.mediawiki import upload_file_in_chunks, get_user_rate_limits
 logger = logging.getLogger("wikimedia_commons_bridge.upload")
 router = APIRouter(prefix="/upload", tags=["Wikimedia Upload Pipeline"])
 
-# In-memory database of active background upload jobs
-class UploadJobTracker:
-    def __init__(self):
-        self._jobs: Dict[str, Dict[str, Any]] = {}
+from sqlalchemy import select
+from app.database import get_db, AsyncSessionLocal
+from app.models.session import UserSession, UploadJob
 
-    def create_job(self, filename: str) -> str:
-        job_id = str(uuid.uuid4())
-        self._jobs[job_id] = {
-            "job_id": job_id,
-            "filename": filename,
-            "status": "queued",
-            "progress_bytes": 0,
-            "total_bytes": 0,
-            "error": None,
-            "description_url": None,
-            "url": None
-        }
-        return job_id
+# DB-backed helpers for job tracking across uWSGI processes
+async def create_upload_job(db: AsyncSession, filename: str) -> str:
+    job_id = str(uuid.uuid4())
+    job = UploadJob(
+        job_id=job_id,
+        filename=filename,
+        status="queued",
+        progress_bytes=0,
+        total_bytes=0
+    )
+    db.add(job)
+    await db.commit()
+    return job_id
 
-    def update_progress(self, job_id: str, progress_bytes: int, total_bytes: int):
-        if job_id in self._jobs:
-            self._jobs[job_id]["status"] = "uploading"
-            self._jobs[job_id]["progress_bytes"] = progress_bytes
-            self._jobs[job_id]["total_bytes"] = total_bytes
+async def update_job_progress(job_id: str, progress_bytes: int, total_bytes: int):
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(select(UploadJob).where(UploadJob.job_id == job_id))
+        job = result.scalar_one_or_none()
+        if job:
+            job.status = "uploading"
+            job.progress_bytes = progress_bytes
+            job.total_bytes = total_bytes
+            await db.commit()
 
-    def mark_success(self, job_id: str, filename: str, description_url: str, url: str):
-        if job_id in self._jobs:
-            self._jobs[job_id]["status"] = "success"
-            self._jobs[job_id]["filename"] = filename
-            self._jobs[job_id]["description_url"] = description_url
-            self._jobs[job_id]["url"] = url
+async def mark_job_success(job_id: str, filename: str, description_url: str, url: str):
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(select(UploadJob).where(UploadJob.job_id == job_id))
+        job = result.scalar_one_or_none()
+        if job:
+            job.status = "success"
+            job.filename = filename
+            job.description_url = description_url
+            job.url = url
+            await db.commit()
 
-    def mark_failed(self, job_id: str, error_msg: str):
-        if job_id in self._jobs:
-            self._jobs[job_id]["status"] = "failed"
-            self._jobs[job_id]["error"] = error_msg
-
-    def get_job(self, job_id: str) -> Optional[Dict[str, Any]]:
-        return self._jobs.get(job_id)
-
-tracker = UploadJobTracker()
+async def mark_job_failed(job_id: str, error_msg: str):
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(select(UploadJob).where(UploadJob.job_id == job_id))
+        job = result.scalar_one_or_none()
+        if job:
+            job.status = "failed"
+            job.error = error_msg
+            await db.commit()
 
 # Pydantic Schemas for requests
 class UploadRequest(BaseModel):
@@ -78,11 +84,11 @@ async def run_background_upload(
     google_token: str,
     license_code: str
 ):
-    tracker.update_progress(job_id, 0, 100)
+    await update_job_progress(job_id, 0, 100)
     
     # Define nested callback function for progress updates
     async def on_progress(bytes_sent: int, total_bytes: int):
-        tracker.update_progress(job_id, bytes_sent, total_bytes)
+        await update_job_progress(job_id, bytes_sent, total_bytes)
         
     try:
         result = await upload_file_in_chunks(
@@ -94,7 +100,7 @@ async def run_background_upload(
             license_code=license_code,
             on_progress=on_progress
         )
-        tracker.mark_success(
+        await mark_job_success(
             job_id=job_id,
             filename=result["filename"],
             description_url=result["description_url"],
@@ -102,7 +108,7 @@ async def run_background_upload(
         )
     except Exception as exc:
         logger.error(f"Background upload task failed for job {job_id}: {exc}")
-        tracker.mark_failed(job_id, str(exc))
+        await mark_job_failed(job_id, str(exc))
 
 @router.post("", status_code=status.HTTP_202_ACCEPTED)
 async def start_upload_job(
@@ -130,8 +136,8 @@ async def start_upload_job(
         lon=request.lon
     )
     
-    # 3. Register the job inside tracker
-    job_id = tracker.create_job(request.commons_filename)
+    # 3. Register the job inside database
+    job_id = await create_upload_job(db, request.commons_filename)
     
     # 4. Schedule background worker
     background_tasks.add_task(
@@ -152,12 +158,22 @@ async def start_upload_job(
     }
 
 @router.get("/status/{job_id}")
-async def get_upload_job_status(job_id: str):
+async def get_upload_job_status(job_id: str, db: AsyncSession = Depends(get_db)):
     """Retrieve the current progress and status of a background upload job."""
-    job = tracker.get_job(job_id)
+    result = await db.execute(select(UploadJob).where(UploadJob.job_id == job_id))
+    job = result.scalar_one_or_none()
     if not job:
         raise HTTPException(status_code=404, detail="Upload job not found")
-    return job
+    return {
+        "job_id": job.job_id,
+        "filename": job.filename,
+        "status": job.status,
+        "progress_bytes": job.progress_bytes,
+        "total_bytes": job.total_bytes,
+        "error": job.error,
+        "description_url": job.description_url,
+        "url": job.url
+    }
 
 @router.get("/limits")
 async def check_user_limits(

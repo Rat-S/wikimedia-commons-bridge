@@ -39,27 +39,23 @@ export const UploadQueue: React.FC<UploadQueueProps> = ({ jobIds, onDone }) => {
 
     const poll = async () => {
       let allFinished = true;
-      const updatedJobs = { ...jobs };
 
       for (const id of jobIds) {
-        const currentJob = jobs[id];
-        // Only poll if the job is not in a terminal state
-        if (!currentJob || currentJob.status === "queued" || currentJob.status === "uploading") {
-          try {
-            const statusData = await api.getUploadStatus(id);
-            updatedJobs[id] = statusData;
-            
-            if (statusData.status === "queued" || statusData.status === "uploading") {
-              allFinished = false;
-            }
-          } catch (err) {
-            console.error(`Failed to poll status for job ${id}:`, err);
+        try {
+          const statusData = await api.getUploadStatus(id);
+          setJobs((prev) => ({
+            ...prev,
+            [id]: statusData
+          }));
+
+          if (statusData.status === "queued" || statusData.status === "uploading") {
             allFinished = false;
           }
+        } catch (err) {
+          console.error(`Failed to poll status for job ${id}:`, err);
+          allFinished = false;
         }
       }
-
-      setJobs(updatedJobs);
 
       if (allFinished) {
         setPollingActive(false);
@@ -69,10 +65,13 @@ export const UploadQueue: React.FC<UploadQueueProps> = ({ jobIds, onDone }) => {
         }
         
         // Trigger confetti celebration if any job succeeded!
-        const succeeded = Object.values(updatedJobs).some((j) => j.status === "success");
-        if (succeeded) {
-          triggerConfettiCelebration();
-        }
+        setJobs((latestJobs) => {
+          const succeeded = Object.values(latestJobs).some((j) => j.status === "success");
+          if (succeeded) {
+            triggerConfettiCelebration();
+          }
+          return latestJobs;
+        });
       }
     };
 
@@ -87,7 +86,7 @@ export const UploadQueue: React.FC<UploadQueueProps> = ({ jobIds, onDone }) => {
         clearInterval(pollTimerRef.current);
       }
     };
-  }, [pollingActive, jobs, jobIds]);
+  }, [pollingActive, jobIds]);
 
   const triggerConfettiCelebration = () => {
     // Elegant double confetti burst
